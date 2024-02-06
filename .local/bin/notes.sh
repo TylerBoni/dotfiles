@@ -1,1 +1,1 @@
-nohup st nvim $HOME/notes.md & disown
+nohup st nvim $HOME/notes.md > /dev/null & disown
