@@ -1,0 +1,21 @@
+import = [
+    "~/.config/alacritty/themes/themes/breeze.toml"
+]
+
+[font]
+normal = { family = "Hack Nerd Font", style = "regular" }
+bold = { family = "Hack Nerd Font", style = "bold" }
+size = 8
+
+[window]
+opacity = 0.88
+padding = { x = 8, y = 8}
+decorations = "None"
+
+[terminal]
+osc52 = "CopyPaste"
+
+[mouse]
+hide_when_typing = true
+
+
