@@ -15,7 +15,11 @@ PS1='[\u@\h \W]\$ '
 # ###############
 #
 export PATH=$PATH:$HOME/.local/bin
+export BG_IMAGE=$HOME/.config/i3/trees-1.jpg
+
 alias nt="alacritty & disown"
 alias l1='ls -1h --color=auto --group-directories-first'
 alias astronvim='NVIM_APPNAME=AstroNvim nvim'
 alias nvchad='NVIM_APPNAME=NvChad nvim'
+
+

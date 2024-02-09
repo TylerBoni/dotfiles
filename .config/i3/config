@@ -204,7 +204,7 @@ bindsym $mod+r mode "resize"
 #        status_command i3status
 #}
 exec_always --no-startup-id ~/.config/i3/polybar.sh &
-exec --no-startup-id nitrogen --set-zoom-fill $HOME/.config/i3/purple-bg.jpg --head=0  && nitrogen --set-auto $HOME/.config/i3/purple-bg.jpg --head=1
+exec --no-startup-id nitrogen --set-zoom-fill $BG_IMAGE --head=0  && nitrogen --set-zoom-fill $BG_IMAGE --head=1
 
 default_border none
 default_floating_border none
