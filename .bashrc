@@ -25,6 +25,14 @@ alias avim='NVIM_APPNAME=AstroNvim nvim'
 alias nvchad='NVIM_APPNAME=NvChad nvim'
 alias tvim='NVIM_APPNAME=tvim nvim'
 alias lvim='NVIM_APPNAME=lazyvim nvim'
+alias wssh='wezterm ssh'
+
+# git aliases
+alias gitu='git add -u && git status'
+alias gitc='git commit -m'
+alias gits='git status'
+alias gitd='git diff'
+
 export GH=https://github.com
 
 
