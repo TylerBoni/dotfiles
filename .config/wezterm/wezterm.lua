@@ -16,8 +16,8 @@ local config = {
     disable_default_key_bindings = true,
     keys = {
         -- Send "CTRL-A" to the terminal when pressing CTRL-A, CTRL-A
-        { key = "-", mods = "ALT",       action=wezterm.action{SplitVertical={domain="CurrentPaneDomain"}}},
-        { key = "\\",mods = "ALT",       action=wezterm.action{SplitHorizontal={domain="CurrentPaneDomain"}}},
+        { key = "_", mods = "ALT",       action=wezterm.action{SplitVertical={domain="CurrentPaneDomain"}}},
+        { key = "|",mods = "ALT",       action=wezterm.action{SplitHorizontal={domain="CurrentPaneDomain"}}},
         { key = "z", mods = "ALT",       action="TogglePaneZoomState" },
         { key = "t", mods = "ALT",       action=wezterm.action{SpawnTab="CurrentPaneDomain"}},
         { key = "h", mods = "ALT",       action=wezterm.action{ActivatePaneDirection="Left"}},
@@ -46,7 +46,7 @@ local config = {
         { key = "8", mods = "ALT",       action=wezterm.action{ActivateTab=7}},
         { key = "9", mods = "ALT",       action=wezterm.action{ActivateTab=8}},
         { key = "w", mods = "ALT", action=wezterm.action{CloseCurrentTab={confirm=true}}},
-        { key = "c", mods = "ALT",       action=wezterm.action{CloseCurrentPane={confirm=false}}},
+        { key = "C", mods = "ALT",       action=wezterm.action{CloseCurrentPane={confirm=false}}},
 
         { key = "n", mods="SHIFT|CTRL",     action="ToggleFullScreen" },
         { key="v",   mods="SHIFT|CTRL",     action=wezterm.action.PasteFrom 'Clipboard'},
