@@ -17,6 +17,9 @@ PS1='[\u@\h \W]\$ '
 export PATH=$PATH:$HOME/.local/bin
 export BG_IMAGE=$HOME/.config/i3/trees-1.jpg
 
+# path for espressif-idf
+export IDF_PATH=$HOME/source/tools/esp/esp-idf
+
 alias nt="nohup alacritty > /dev/null & disown"
 alias tx='tmux new-session -s $(basename $PWD)'
 alias ta='tmux a -t $(basename $PWD)'
@@ -25,13 +28,31 @@ alias avim='NVIM_APPNAME=AstroNvim nvim'
 alias nvchad='NVIM_APPNAME=NvChad nvim'
 alias tvim='NVIM_APPNAME=tvim nvim'
 alias lvim='NVIM_APPNAME=lazyvim nvim'
-alias wssh='wezterm ssh'
+# alias wssh='wezterm ssh && disown'
+function wssh() {
+    nohup wezterm ssh $1 > /dev/null &
+    disown && sleep 2 && exit
+}
 
 # git aliases
 alias gitu='git add -u && git status'
 alias gitc='git commit -m'
 alias gits='git status'
 alias gitd='git diff'
+
+# add newlines before bash prompt
+dashed_ps1='\n\[$(printf "%*s" $(($(tput cols)-11)) "" | sed "s/ /-/g") \t\r\u@\h:\w\]\n\n\W\$ '
+regular_ps1='\u@\h:\w\$ '
+
+export PS1=$regular_ps1
+
+function setps1() {
+    if [ "$1" == "dashed" ]; then
+        export PS1=$dashed_ps1
+    else
+        export PS1=$regular_ps1
+    fi
+}
 
 export GH=https://github.com
 

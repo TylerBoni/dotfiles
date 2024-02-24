@@ -16,8 +16,8 @@ local config = {
     disable_default_key_bindings = true,
     keys = {
         -- Send "CTRL-A" to the terminal when pressing CTRL-A, CTRL-A
-        { key = "_", mods = "ALT",       action=wezterm.action{SplitVertical={domain="CurrentPaneDomain"}}},
-        { key = "|",mods = "ALT",       action=wezterm.action{SplitHorizontal={domain="CurrentPaneDomain"}}},
+        { key = "_", mods = "ALT|SHIFT",       action=wezterm.action{SplitVertical={domain="CurrentPaneDomain"}}},
+        { key = "|",mods = "ALT|SHIFT",       action=wezterm.action{SplitHorizontal={domain="CurrentPaneDomain"}}},
         { key = "z", mods = "ALT",       action="TogglePaneZoomState" },
         { key = "t", mods = "ALT",       action=wezterm.action{SpawnTab="CurrentPaneDomain"}},
         { key = "h", mods = "ALT",       action=wezterm.action{ActivatePaneDirection="Left"}},
