@@ -14,20 +14,21 @@ PS1='[\u@\h \W]\$ '
 # Added by tboni
 # ###############
 #
+export WOKWI_CLI_TOKEN=$(cat $HOME/.wokwi/.token)
 export PATH=$PATH:$HOME/.local/bin
 export BG_IMAGE=$HOME/.config/i3/trees-1.jpg
 
 # path for espressif-idf
-export IDF_PATH=$HOME/source/tools/esp/esp-idf
+alias activate_idf='. $HOME/.esp/esp-idf/export.sh'
 
 alias nt="nohup alacritty > /dev/null & disown"
 alias tx='tmux new-session -s $(basename $PWD)'
 alias ta='tmux a -t $(basename $PWD)'
 alias l1='ls -1h --color=auto --group-directories-first'
-alias avim='NVIM_APPNAME=AstroNvim nvim'
-alias nvchad='NVIM_APPNAME=NvChad nvim'
-alias tvim='NVIM_APPNAME=tvim nvim'
-alias lvim='NVIM_APPNAME=lazyvim nvim'
+# alias avim='NVIM_APPNAME=AstroNvim nvim'
+# alias nvchad='NVIM_APPNAME=NvChad nvim'
+# alias tvim='NVIM_APPNAME=tvim nvim'
+# alias lvim='NVIM_APPNAME=lazyvim nvim'
 # alias wssh='wezterm ssh && disown'
 function wssh() {
     nohup wezterm ssh $1 > /dev/null &
@@ -57,3 +58,4 @@ function setps1() {
 export GH=https://github.com
 
 
+export PATH="/home/tboni/bin:$PATH"
