@@ -56,8 +56,9 @@ local config = {
 }
 
 if wezterm.target_triple == "x86_64-pc-windows-msvc" then
-    -- config.front_end = "Software" -- OpenGL doesn't work quite well with RDP.
-    -- config.term = "" -- Set to empty so FZF works on windows
+    config.front_end = "Software" -- OpenGL doesn't work quite well with RDP.
+    config.term = "" -- Set to empty so FZF works on windows
+    config.default_prog = {"powershell.exe", "-NoLogo"}
     table.insert(config.launch_menu, { label = "PowerShell", args = {"powershell.exe", "-NoLogo"} })
 
     -- Find installed visual studio version(s) and add their compilation
