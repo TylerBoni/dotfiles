@@ -1,10 +1,12 @@
 local wezterm = require("wezterm")
 
 local config = {
+    enable_wayland = true,
     prefer_egl=true,
+    hide_tab_bar_if_only_one_tab = true,
     audible_bell = "Disabled",
-    check_for_updates = false,
---    color_scheme = "Builtin Solarized Dark",
+    check_for_updates = true,
+    color_scheme = "Andromeda",
     inactive_pane_hsb = {
         hue = 1.0,
         saturation = 1.0,
@@ -71,9 +73,8 @@ if wezterm.target_triple == "x86_64-pc-windows-msvc" then
         })
     end
 else
-    config.default_prog = { '/bin/bash', '-l' }
+    config.default_prog = { '/bin/bash' }
     table.insert(config.launch_menu, { label = "bash", args = {"bash", "-l"} })
-    table.insert(config.launch_menu, { label = "fish", args = {"fish", "-l"} })
 end
 
 return config

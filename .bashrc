@@ -14,7 +14,6 @@ PS1='[\u@\h \W]\$ '
 # Added by tboni
 # ###############
 #
-export WOKWI_CLI_TOKEN=$(cat $HOME/.wokwi/.token)
 export PATH=$PATH:$HOME/.local/bin
 export BG_IMAGE=$HOME/.config/i3/trees-1.jpg
 
