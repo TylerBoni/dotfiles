@@ -11,11 +11,19 @@
 
 # start notification server
 exec --no-startup-id dunst
-exec --no-startup-id bash ~/.config/sway/battery_alert.sh &
+exec --no-startup-id bash ~/.config/notifications/battery_alert.sh &
 
 output eDP-1 resolution 1366x768 position 0,688
 output HDMI-A-1 resolution 3440x1440 position 1366,0 
 
+input type:touchpad {
+    # left_handed enabled
+    tap enabled
+    natural_scroll disabled
+    dwt enabled
+    accel_profile "flat" # disable mouse acceleration (enabled by default; to set it manually, use "adaptive" instead of "flat")
+    pointer_accel 0.5 # set mouse sensitivity (between -1 and 1)
+}
 
 set $mod Mod4
 set $term wezterm
@@ -71,12 +79,8 @@ bindsym $mod+Shift+c kill
 bindsym $mod+v exec --no-startup-id $term pulsemixer
 # start dmenu (a program launcher)
 bindsym $mod+p exec --no-startup-id $(tofi-run)
-# A more modern dmenu replacement is rofi:
-# bindcode $mod+40 exec "rofi -modi drun,run -show drun"
-# There also is i3-dmenu-desktop which only displays applications shipping a
-# .desktop file. It is a wrapper around dmenu, so you need that installed.
-#bindcode $mod+40 exec --no-startup-id i3-dmenu-desktop
 bindsym $mod+g exec --no-startup-id $browser
+bindsym $mod+b exec --no-startup-id ~/.config/notifications/battery.sh
 
 # change focus
 bindsym $mod+h focus left
