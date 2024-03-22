@@ -3,6 +3,7 @@ local wezterm = require("wezterm")
 local config = {
     enable_wayland = true,
     prefer_egl=true,
+    window_decorations = "None",
     hide_tab_bar_if_only_one_tab = true,
     audible_bell = "Disabled",
     check_for_updates = true,
