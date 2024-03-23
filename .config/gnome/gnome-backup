@@ -6,8 +6,8 @@ window-maximized=true
 
 [org/gnome/Snapshot]
 is-maximized=false
-window-height=640
-window-width=800
+window-height=760
+window-width=677
 
 [org/gnome/calculator]
 accuracy=9
@@ -28,7 +28,7 @@ word-size=64
 [org/gnome/calendar]
 active-view='month'
 window-maximized=false
-window-size=(1366, 736)
+window-size=(677, 760)
 
 [org/gnome/clocks]
 world-clocks=@aa{sv} []
@@ -39,7 +39,7 @@ panel-id='world'
 size=(677, 728)
 
 [org/gnome/control-center]
-last-panel='info-overview'
+last-panel='power'
 window-state=(677, 760, false)
 
 [org/gnome/desktop/a11y/applications]
@@ -98,8 +98,11 @@ toolbar-style='text'
 toolkit-accessibility=false
 
 [org/gnome/desktop/notifications]
-application-children=['org-gnome-calculator', 'google-chrome', 'org-wezfurlong-wezterm', 'org-gnome-settings', 'org-gnome-epiphany']
+application-children=['org-gnome-calculator', 'google-chrome', 'org-wezfurlong-wezterm', 'org-gnome-settings', 'org-gnome-epiphany', 'vlc', 'xdg-desktop-portal-gnome', 'yelp', 'gnome-power-panel']
 show-banners=true
+
+[org/gnome/desktop/notifications/application/gnome-power-panel]
+application-id='gnome-power-panel.desktop'
 
 [org/gnome/desktop/notifications/application/google-chrome]
 application-id='google-chrome.desktop'
@@ -116,6 +119,15 @@ application-id='org.gnome.Settings.desktop'
 
 [org/gnome/desktop/notifications/application/org-wezfurlong-wezterm]
 application-id='org.wezfurlong.wezterm.desktop'
+
+[org/gnome/desktop/notifications/application/vlc]
+application-id='vlc.desktop'
+
+[org/gnome/desktop/notifications/application/xdg-desktop-portal-gnome]
+application-id='xdg-desktop-portal-gnome.desktop'
+
+[org/gnome/desktop/notifications/application/yelp]
+application-id='yelp.desktop'
 
 [org/gnome/desktop/peripherals/mouse]
 natural-scroll=true
@@ -147,12 +159,18 @@ theme-name='ocean'
 
 [org/gnome/desktop/wm/keybindings]
 close=['<Shift><Super>c']
+minimize=@as []
 move-to-monitor-left=['<Shift><Super>comma']
 move-to-monitor-right=['<Shift><Super>period']
 move-to-workspace-1=['<Shift><Super>1']
 move-to-workspace-2=['<Shift><Super>2']
-move-to-workspace-3=['<Shift><Super>8']
-move-to-workspace-4=['<Shift><Super>9']
+move-to-workspace-3=['<Shift><Super>3']
+move-to-workspace-4=['<Shift><Super>4']
+move-to-workspace-5=['<Shift><Super>5']
+move-to-workspace-6=['<Shift><Super>6']
+move-to-workspace-7=['<Shift><Super>7']
+move-to-workspace-8=['<Shift><Super>8']
+move-to-workspace-9=['<Shift><Super>9']
 move-to-workspace-left=['<Shift><Super>Left']
 move-to-workspace-right=['<Shift><Super>Right']
 panel-run-dialog=@as []
@@ -162,13 +180,18 @@ switch-group=@as []
 switch-group-backward=@as []
 switch-to-workspace-1=['<Super>1']
 switch-to-workspace-2=['<Super>2']
-switch-to-workspace-3=['<Super>8']
-switch-to-workspace-4=['<Super>9']
+switch-to-workspace-3=['<Super>3']
+switch-to-workspace-4=['<Super>4']
+switch-to-workspace-5=['<Super>5']
+switch-to-workspace-6=['<Super>6']
+switch-to-workspace-7=['<Super>7']
+switch-to-workspace-8=['<Super>8']
+switch-to-workspace-9=['<Super>9']
 toggle-fullscreen=['F11']
 
 [org/gnome/desktop/wm/preferences]
 button-layout='icon:minimize,maximize,close'
-num-workspaces=4
+num-workspaces=9
 workspace-names=@as []
 
 [org/gnome/epiphany]
@@ -200,12 +223,12 @@ workspaces-only-on-primary=false
 default-zoom-level='small-plus'
 
 [org/gnome/nautilus/preferences]
-default-folder-viewer='icon-view'
+default-folder-viewer='list-view'
 migrated-gtk-settings=true
 search-filter-time-type='last_modified'
 
 [org/gnome/nautilus/window-state]
-initial-size=(677, 380)
+initial-size=(677, 760)
 
 [org/gnome/portal/filechooser/google-chrome]
 last-folder-path='/home/tboni/Downloads'
@@ -214,11 +237,12 @@ last-folder-path='/home/tboni/Downloads'
 orientation-lock=false
 
 [org/gnome/settings-daemon/plugins/color]
-night-light-enabled=true
+night-light-enabled=false
 
 [org/gnome/settings-daemon/plugins/media-keys]
 calculator=['<Super>m']
-custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/']
+help=@as []
 search=@as []
 www=@as []
 
@@ -232,15 +256,22 @@ binding='<Super>g'
 command='google-chrome-stable'
 name='browser'
 
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2]
+binding='<Super>n'
+command='/home/tboni/.config/gnome/nightlight.sh'
+name='nightlight'
+
 [org/gnome/settings-daemon/plugins/power]
 power-button-action='nothing'
+sleep-inactive-ac-type='nothing'
+sleep-inactive-battery-type='suspend'
 
 [org/gnome/shell]
 command-history=['google-chrome-stable']
 disable-extension-version-validation=false
 disable-user-extensions=false
-disabled-extensions=['native-window-placement@gnome-shell-extensions.gcampax.github.com', 'places-menu@gnome-shell-extensions.gcampax.github.com', 'drive-menu@gnome-shell-extensions.gcampax.github.com', 'window-list@gnome-shell-extensions.gcampax.github.com', 'windowsNavigator@gnome-shell-extensions.gcampax.github.com', 'screenshot-window-sizer@gnome-shell-extensions.gcampax.github.com', 'apps-menu@gnome-shell-extensions.gcampax.github.com']
-enabled-extensions=['enhancedosk@cass00.github.io', 'forge@jmmaranan.com', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com', 'hidetopbar@mathieu.bidon.ca', 'dash-to-panel@jderose9.github.com']
+disabled-extensions=['native-window-placement@gnome-shell-extensions.gcampax.github.com', 'places-menu@gnome-shell-extensions.gcampax.github.com', 'drive-menu@gnome-shell-extensions.gcampax.github.com', 'window-list@gnome-shell-extensions.gcampax.github.com', 'windowsNavigator@gnome-shell-extensions.gcampax.github.com', 'screenshot-window-sizer@gnome-shell-extensions.gcampax.github.com', 'apps-menu@gnome-shell-extensions.gcampax.github.com', 'just-perfection-desktop@just-perfection']
+enabled-extensions=['enhancedosk@cass00.github.io', 'forge@jmmaranan.com', 'hidetopbar@mathieu.bidon.ca', 'dash-to-panel@jderose9.github.com', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com']
 favorite-apps=['google-chrome.desktop', 'org.wezfurlong.wezterm.desktop', 'org.gnome.Nautilus.desktop']
 welcome-dialog-last-shown-version='45.5'
 
@@ -259,6 +290,7 @@ intellihide-hide-from-windows=true
 intellihide-key-toggle=['<Super>b']
 intellihide-key-toggle-text='<Super>b'
 intellihide-use-pressure=false
+isolate-workspaces=true
 leftbox-padding=-1
 panel-anchors='{"0":"MIDDLE"}'
 panel-element-positions='{"0":[{"element":"showAppsButton","visible":true,"position":"stackedTL"},{"element":"activitiesButton","visible":true,"position":"stackedTL"},{"element":"leftBox","visible":true,"position":"stackedTL"},{"element":"taskbar","visible":true,"position":"stackedTL"},{"element":"centerBox","visible":false,"position":"stackedBR"},{"element":"rightBox","visible":false,"position":"stackedBR"},{"element":"dateMenu","visible":true,"position":"centerMonitor"},{"element":"systemMenu","visible":true,"position":"stackedBR"},{"element":"desktopButton","visible":false,"position":"stackedBR"}]}'
@@ -269,7 +301,7 @@ primary-monitor=0
 status-icon-padding=-1
 trans-bg-color='#5e5c64'
 trans-panel-opacity=0.5
-trans-use-custom-bg=true
+trans-use-custom-bg=false
 trans-use-custom-gradient=true
 trans-use-custom-opacity=false
 tray-padding=-1
@@ -292,6 +324,7 @@ focus-border-toggle=false
 preview-hint-enabled=false
 stacked-tiling-mode-enabled=false
 tabbed-tiling-mode-enabled=false
+tiling-mode-enabled=true
 window-gap-hidden-on-single=true
 window-gap-size=uint32 2
 workspace-skip-tile=''
@@ -382,6 +415,7 @@ workspace-switcher-size=0
 workspaces-in-app-grid=true
 
 [org/gnome/shell/keybindings]
+focus-active-notification=@as []
 switch-to-application-1=@as []
 switch-to-application-2=@as []
 switch-to-application-3=@as []
@@ -395,9 +429,9 @@ toggle-overview=['<Super>p']
 locations=@av []
 
 [org/gnome/software]
-check-timestamp=int64 1711064760
+check-timestamp=int64 1711208697
 first-run=false
-flatpak-purge-timestamp=int64 1711080673
+flatpak-purge-timestamp=int64 1711159388
 
 [org/gnome/tweaks]
 show-extensions-notice=false
