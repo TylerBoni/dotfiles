@@ -39,8 +39,8 @@ panel-id='world'
 size=(677, 728)
 
 [org/gnome/control-center]
-last-panel='power'
-window-state=(677, 760, false)
+last-panel='keyboard'
+window-state=(954, 534, false)
 
 [org/gnome/desktop/a11y/applications]
 screen-keyboard-enabled=false
@@ -129,10 +129,15 @@ application-id='xdg-desktop-portal-gnome.desktop'
 [org/gnome/desktop/notifications/application/yelp]
 application-id='yelp.desktop'
 
+[org/gnome/desktop/peripherals/keyboard]
+numlock-state=true
+
 [org/gnome/desktop/peripherals/mouse]
 natural-scroll=true
+speed=0.0
 
 [org/gnome/desktop/peripherals/touchpad]
+speed=0.24513618677042803
 tap-to-click=true
 two-finger-scrolling-enabled=true
 
@@ -230,6 +235,9 @@ search-filter-time-type='last_modified'
 [org/gnome/nautilus/window-state]
 initial-size=(677, 760)
 
+[org/gnome/portal/filechooser/google-chrome-stable]
+last-folder-path='/home/tboni/desktop/downloads'
+
 [org/gnome/portal/filechooser/google-chrome]
 last-folder-path='/home/tboni/Downloads'
 
@@ -271,7 +279,7 @@ command-history=['google-chrome-stable']
 disable-extension-version-validation=false
 disable-user-extensions=false
 disabled-extensions=['native-window-placement@gnome-shell-extensions.gcampax.github.com', 'places-menu@gnome-shell-extensions.gcampax.github.com', 'drive-menu@gnome-shell-extensions.gcampax.github.com', 'window-list@gnome-shell-extensions.gcampax.github.com', 'windowsNavigator@gnome-shell-extensions.gcampax.github.com', 'screenshot-window-sizer@gnome-shell-extensions.gcampax.github.com', 'apps-menu@gnome-shell-extensions.gcampax.github.com', 'just-perfection-desktop@just-perfection']
-enabled-extensions=['enhancedosk@cass00.github.io', 'forge@jmmaranan.com', 'hidetopbar@mathieu.bidon.ca', 'dash-to-panel@jderose9.github.com', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com']
+enabled-extensions=['enhancedosk@cass00.github.io', 'forge@jmmaranan.com', 'hidetopbar@mathieu.bidon.ca', 'dash-to-panel@jderose9.github.com', 'workspace-indicator@gnome-shell-extensions.gcampax.github.com', 'gestureImprovements@gestures']
 favorite-apps=['google-chrome.desktop', 'org.wezfurlong.wezterm.desktop', 'org.gnome.Nautilus.desktop']
 welcome-dialog-last-shown-version='45.5'
 
@@ -370,58 +378,13 @@ window-toggle-always-float=['<Shift><Super>f']
 window-toggle-float=['<Super>f']
 workspace-active-tile-toggle=['<Shift><Super>w']
 
-[org/gnome/shell/extensions/just-perfection]
-accessibility-menu=true
-activities-button=true
-alt-tab-small-icon-size=0
-alt-tab-window-preview-size=0
-animation=1
-background-menu=true
-clock-menu=true
-clock-menu-position=0
-controls-manager-spacing-size=0
-dash=true
-dash-icon-size=0
-dash-separator=true
-double-super-to-appgrid=true
-keyboard-layout=true
-osd=true
-overlay-key=true
-panel=true
-panel-icon-size=0
-panel-in-overview=true
-panel-notification-icon=true
-panel-size=0
-power-icon=true
-quick-settings=true
-ripple-box=true
-screen-recording-indicator=true
-screen-sharing-indicator=true
-search=true
-show-apps-button=true
-startup-status=1
-switcher-popup-delay=true
-theme=false
-top-panel-position=0
-window-demands-attention-focus=false
-window-menu-take-screenshot-button=true
-window-picker-icon=true
-window-preview-caption=true
-window-preview-close-button=true
-workspace=true
-workspace-background-corner-size=0
-workspace-popup=true
-workspace-switcher-size=0
-workspaces-in-app-grid=true
-
-[org/gnome/shell/keybindings]
-focus-active-notification=@as []
-switch-to-application-1=@as []
-switch-to-application-2=@as []
-switch-to-application-3=@as []
-switch-to-application-4=@as []
-switch-to-application-8=@as []
-switch-to-application-9=@as []
+[org/gnome/shell/extensions/gestureImprovements]
+default-overview=true
+default-session-workspace=true
+enable-alttab-gesture=false
+follow-natural-scroll=true
+hold-swipe-delay-duration=0
+touchpad-speed-scale=5.1100000000000003
 toggle-message-tray=@as []
 toggle-overview=['<Super>p']
 
