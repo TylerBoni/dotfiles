@@ -1,6 +1,10 @@
 [org/gnome/Console]
 last-window-size=(652, 480)
 
+[org/gnome/Extensions]
+window-height=760
+window-width=677
+
 [org/gnome/Music]
 window-maximized=true
 
@@ -39,8 +43,8 @@ panel-id='world'
 size=(677, 728)
 
 [org/gnome/control-center]
-last-panel='keyboard'
-window-state=(954, 534, false)
+last-panel='applications'
+window-state=(677, 760, false)
 
 [org/gnome/desktop/a11y/applications]
 screen-keyboard-enabled=false
@@ -245,11 +249,11 @@ last-folder-path='/home/tboni/Downloads'
 orientation-lock=false
 
 [org/gnome/settings-daemon/plugins/color]
-night-light-enabled=false
+night-light-enabled=true
 
 [org/gnome/settings-daemon/plugins/media-keys]
 calculator=['<Super>m']
-custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/']
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/']
 help=@as []
 search=@as []
 www=@as []
@@ -268,6 +272,11 @@ name='browser'
 binding='<Super>n'
 command='/home/tboni/.config/gnome/nightlight.sh'
 name='nightlight'
+
+[org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3]
+binding='<Super>7'
+command='echo hi'
+name='temp'
 
 [org/gnome/settings-daemon/plugins/power]
 power-button-action='nothing'
@@ -384,7 +393,22 @@ default-session-workspace=true
 enable-alttab-gesture=false
 follow-natural-scroll=true
 hold-swipe-delay-duration=0
+toggle-message-tray=@as []
+toggle-overview=['<Super>p']
 touchpad-speed-scale=5.1100000000000003
+
+[org/gnome/shell/keybindings]
+focus-active-notification=@as []
+switch-to-application-*=['']
+switch-to-application-1=['']
+switch-to-application-2=['']
+switch-to-application-3=['']
+switch-to-application-4=['']
+switch-to-application-5=['']
+switch-to-application-6=['']
+switch-to-application-7=['']
+switch-to-application-8=['']
+switch-to-application-9=['']
 toggle-message-tray=@as []
 toggle-overview=['<Super>p']
 
@@ -392,7 +416,7 @@ toggle-overview=['<Super>p']
 locations=@av []
 
 [org/gnome/software]
-check-timestamp=int64 1711208697
+check-timestamp=int64 1711311135
 first-run=false
 flatpak-purge-timestamp=int64 1711159388
 
