@@ -68,49 +68,46 @@ export class WindowManager extends GObject.Object {
       !production ? "DEV" : `${PACKAGE_VERSION}-${ext.metadata.version}`
     }`;
     this.windowProps = this.ext.configMgr.windowProps;
+    this.windowProps.overrides = this.windowProps.overrides.filter((override) => !override.wmId);
     this._kbd = this.ext.keybindings;
     this._tree = new Tree(this);
     this.eventQueue = new Queue();
     this.theme = this.ext.theme;
+    this.lastFocusedWindow = null;
     Logger.info("forge initialized");
   }
 
-  addFloatOverride(metaWindow, byClass = true) {
+  addFloatOverride(metaWindow, withWmId) {
     let overrides = this.windowProps.overrides;
-    let wmTitle = metaWindow.get_title();
     let wmClass = metaWindow.get_wm_class();
+    let wmId = metaWindow.get_id();
 
     for (let override in overrides) {
-      if (!byClass) {
-        if (override.wmClass === wmClass && override.wmTitle === wmTitle) return;
-      } else {
-        if (override.wmClass === wmClass && !override.wmTitle) return;
-      }
+      // if the window is already floating
+      if (override.wmClass === wmClass && override.mode === "float" && !override.wmTitle) return;
     }
     overrides.push({
       wmClass: wmClass,
-      wmTitle: !byClass ? wmTitle : undefined,
+      wmId: withWmId ? wmId : undefined,
       mode: "float",
     });
     this.windowProps.overrides = overrides;
     this.ext.configMgr.windowProps = this.windowProps;
   }
 
-  removeFloatOverride(metaWindow, byClass = true) {
+  removeFloatOverride(metaWindow, withWmId) {
     let overrides = this.windowProps.overrides;
-    let wmTitle = metaWindow.get_title();
     let wmClass = metaWindow.get_wm_class();
-
-    if (byClass) {
-      // remove purely wmClass - by checking also if override title exists
-      overrides = overrides.filter(
-        (override) => !(override.wmClass === wmClass) && !override.wmTitle
-      );
-    } else {
-      overrides = overrides.filter(
-        (override) => !(override.wmClass === wmClass && override.wmTitle === wmTitle)
-      );
-    }
+    let wmId = metaWindow.get_id();
+    overrides = overrides.filter(
+      (override) =>
+        !(
+          override.wmClass === wmClass &&
+          // rules with a Title are written by the user and peristent
+          !override.wmTitle &&
+          (!withWmId || override.wmId === wmId)
+        )
+    );
 
     this.windowProps.overrides = overrides;
     this.ext.configMgr.windowProps = this.windowProps;
@@ -121,26 +118,18 @@ export class WindowManager extends GObject.Object {
     if (!nodeWindow || !(action || action.mode)) return;
     if (nodeWindow.nodeType !== NODE_TYPES.WINDOW) return;
 
-    let floatToggle = action.name === "FloatToggle";
-    let floatClassToggle = action.name === "FloatClassToggle";
+    let withWmId = action.name === "FloatToggle";
     let floatingExempt = this.isFloatingExempt(metaWindow);
 
     if (floatingExempt) {
-      if (floatClassToggle) {
-        this.removeFloatOverride(metaWindow);
-      } else if (floatToggle) {
-        this.removeFloatOverride(metaWindow, false);
-      }
-      nodeWindow.mode = WINDOW_MODES.TILE;
+      this.removeFloatOverride(metaWindow, withWmId);
       if (!this.isActiveWindowWorkspaceTiled(metaWindow)) {
         nodeWindow.mode = WINDOW_MODES.FLOAT;
+      } else {
+        nodeWindow.mode = WINDOW_MODES.TILE;
       }
     } else {
-      if (floatClassToggle) {
-        this.addFloatOverride(metaWindow);
-      } else if (floatToggle) {
-        this.addFloatOverride(metaWindow, false);
-      }
+      this.addFloatOverride(metaWindow, withWmId);
       nodeWindow.mode = WINDOW_MODES.FLOAT;
     }
   }
@@ -350,6 +339,7 @@ export class WindowManager extends GObject.Object {
             const focusNodeWindow = this.tree.findNode(this.focusMetaWindow);
             this.updateStackedFocus(focusNodeWindow);
             this.updateTabbedFocus(focusNodeWindow);
+            this.movePointerWith(focusNodeWindow);
           },
         };
         this.queueEvent(eventObj);
@@ -444,6 +434,7 @@ export class WindowManager extends GObject.Object {
     let currentLayout;
 
     switch (action.name) {
+      case "FloatNonPersistentToggle":
       case "FloatToggle":
       case "FloatClassToggle":
         this.toggleFloatingMode(action, focusWindow);
@@ -499,6 +490,7 @@ export class WindowManager extends GObject.Object {
                 if (prev) prev.parentNode.lastTabFocus = prev.nodeValue;
                 this.renderTree("move-tabbed-queue");
               }
+              this.movePointerWith(focusNodeWindow);
             }
           },
         });
@@ -523,6 +515,7 @@ export class WindowManager extends GObject.Object {
         focusNodeWindow.nodeValue.raise();
         this.updateTabbedFocus(focusNodeWindow);
         this.updateStackedFocus(focusNodeWindow);
+        this.movePointerWith(focusNodeWindow);
         this.renderTree("swap", true);
         break;
       case "Split":
@@ -679,6 +672,7 @@ export class WindowManager extends GObject.Object {
           );
           let lastActiveNodeWindow = this.tree.findNode(lastActiveWindow);
           this.tree.swapPairs(lastActiveNodeWindow, focusNodeWindow);
+          this.movePointerWith(focusNodeWindow);
           this.renderTree("swap-last-active");
         }
         break;
@@ -914,7 +908,7 @@ export class WindowManager extends GObject.Object {
           try {
             nodeWindow.tab.remove_style_class_name("window-tabbed-tab-active");
           } catch (e) {
-            Logger.warn(e);
+            // Logger.warn(e);
           }
         }
       }
@@ -1425,6 +1419,8 @@ export class WindowManager extends GObject.Object {
                   this.updateDecorationLayout();
                   this.updateStackedFocus();
                   this.updateTabbedFocus();
+                  let focusNodeWindow = this.tree.findNode(this.focusMetaWindow);
+                  this.movePointerWith(focusNodeWindow);
                 },
               });
               let focusNodeWindow = this.tree.findNode(this.focusMetaWindow);
@@ -1495,6 +1491,8 @@ export class WindowManager extends GObject.Object {
           .get_workspace()
           .activate_with_focus(metaWindow, global.display.get_current_time());
         this.moveCenter(metaWindow);
+      } else {
+        this.movePointerWith(metaWindow);
       }
     }
   }
@@ -1613,9 +1611,10 @@ export class WindowManager extends GObject.Object {
     let nodeWindow;
     nodeWindow = this.tree.findNodeByActor(actor);
 
-    if (nodeWindow) {
+    if (nodeWindow?.isWindow()) {
       this.tree.removeNode(nodeWindow);
       this.renderTree("window-destroy-quick", true);
+      this.removeFloatOverride(nodeWindow.nodeValue, true);
     }
 
     // find the next attachNode here
@@ -1777,10 +1776,26 @@ export class WindowManager extends GObject.Object {
    */
   movePointerWith(nodeWindow) {
     if (!nodeWindow || !nodeWindow._data) return;
-    let rect = nodeWindow._data.get_frame_rect();
-    global.get_pointer();
-    const seat = Clutter.get_default_backend().get_default_seat();
-    seat.warp_pointer(rect.x, rect.y);
+    if (this.ext.settings.get_boolean("move-pointer-focus-enabled")) {
+      this.storePointerLastPosition(this.lastFocusedWindow);
+      if (this.canMovePointerInsideNodeWindow(nodeWindow)) {
+        this.warpPointerToNodeWindow(nodeWindow);
+      }
+    }
+    this.lastFocusedWindow = nodeWindow;
+    this.tree.debugParentNodes(nodeWindow);
+  }
+
+  warpPointerToNodeWindow(nodeWindow) {
+    const newCoord = this.getPointerPositionInside(nodeWindow);
+    if (newCoord && newCoord.x && newCoord.y) {
+      const seat = Clutter.get_default_backend().get_default_seat();
+      if (seat) {
+        const wmTitle = nodeWindow.nodeValue.get_title();
+        Logger.debug(`moved pointer to [${wmTitle}] at (${newCoord.x},${newCoord.y})`);
+        seat.warp_pointer(newCoord.x, newCoord.y);
+      }
+    }
   }
 
   getPointer() {
@@ -1820,6 +1835,7 @@ export class WindowManager extends GObject.Object {
       const horizontal = parentNodeTarget.isHSplit() || parentNodeTarget.isTabbed();
       const isMonParent = parentNodeTarget.nodeType === NODE_TYPES.MONITOR;
       const isConParent = parentNodeTarget.nodeType === NODE_TYPES.CON;
+      const centerLayout = this.ext.settings.get_string("dnd-center-layout").toUpperCase();
       const stacked = parentNodeTarget.isStacked();
       const tabbed = parentNodeTarget.isTabbed();
       const stackedOrTabbed = stacked || tabbed;
@@ -1917,28 +1933,35 @@ export class WindowManager extends GObject.Object {
       const isCenter = Utils.rectContainsPoint(centerRegion, currPointer);
 
       if (isCenter) {
-        if (stackedOrTabbed) {
-          containerNode = parentNodeTarget;
-          referenceNode = null;
+        if (centerLayout == "SWAP") {
+          referenceNode = nodeWinAtPointer;
           previewParams = {
-            className: stacked ? "window-tilepreview-stacked" : "window-tilepreview-tabbed",
             targetRect: targetRect,
           };
         } else {
-          if (isMonParent) {
-            childNode.createCon = true;
+          if (stackedOrTabbed) {
             containerNode = parentNodeTarget;
-            referenceNode = nodeWinAtPointer;
+            referenceNode = null;
             previewParams = {
+              className: stacked ? "window-tilepreview-stacked" : "window-tilepreview-tabbed",
               targetRect: targetRect,
             };
           } else {
-            containerNode = parentNodeTarget;
-            referenceNode = null;
-            const parentTargetRect = this.tree.processGap(parentNodeTarget);
-            previewParams = {
-              targetRect: parentTargetRect,
-            };
+            if (isMonParent) {
+              childNode.createCon = true;
+              containerNode = parentNodeTarget;
+              referenceNode = nodeWinAtPointer;
+              previewParams = {
+                targetRect: targetRect,
+              };
+            } else {
+              containerNode = parentNodeTarget;
+              referenceNode = null;
+              const parentTargetRect = this.tree.processGap(parentNodeTarget);
+              previewParams = {
+                targetRect: parentTargetRect,
+              };
+            }
           }
         }
       } else if (isLeft) {
@@ -2117,7 +2140,6 @@ export class WindowManager extends GObject.Object {
           } else if (isTop || isBottom) {
             childNode.layout = LAYOUT_TYPES.VSPLIT;
           } else if (isCenter) {
-            const centerLayout = this.ext.settings.get_string("dnd-center-layout").toUpperCase();
             childNode.layout = LAYOUT_TYPES[centerLayout];
           }
         } else if (childNode.detachWindow) {
@@ -2125,6 +2147,9 @@ export class WindowManager extends GObject.Object {
             isLeft || isRight ? ORIENTATION_TYPES.HORIZONTAL : ORIENTATION_TYPES.VERTICAL;
           this.tree.split(childNode, orientation);
           containerNode.insertBefore(childNode.parentNode, referenceNode);
+        } else if (isCenter && centerLayout == "SWAP") {
+          this.tree.swapPairs(referenceNode, focusNodeWindow);
+          this.renderTree("drag-swap");
         } else {
           // Child Node is a WINDOW
           containerNode.insertBefore(childNode, referenceNode);
@@ -2134,16 +2159,80 @@ export class WindowManager extends GObject.Object {
             if (!stackedOrTabbed) containerNode.layout = LAYOUT_TYPES.VSPLIT;
           } else if (isCenter) {
             if (containerNode.isHSplit() || containerNode.isVSplit()) {
-              const centerLayout = this.ext.settings.get_string("dnd-center-layout").toUpperCase();
               containerNode.layout = LAYOUT_TYPES[centerLayout];
             }
           }
         }
+        previousParent.resetLayoutSingleChild();
       } else {
         updatePreview(focusNodeWindow, previewParams);
       }
       childNode.createCon = false;
       childNode.detachWindow = false;
+    }
+  }
+
+  canMovePointerInsideNodeWindow(nodeWindow) {
+    if (nodeWindow && nodeWindow._data) {
+      const metaWindow = nodeWindow.nodeValue;
+      const metaRect = metaWindow.get_frame_rect();
+      const pointerCoord = global.get_pointer();
+      return (
+        metaRect &&
+        // xdg-copy creates a 1x1 pixel window to capture mouse events.
+        metaRect.width > 8 &&
+        metaRect.height > 8 &&
+        !Utils.rectContainsPoint(metaRect, pointerCoord) &&
+        !metaWindow.minimized &&
+        !Main.overview.visible &&
+        !this.pointerIsOverParentDecoration(nodeWindow, pointerCoord)
+      );
+    }
+    return false;
+  }
+
+  pointerIsOverParentDecoration(nodeWindow, pointerCoord) {
+    if (pointerCoord && nodeWindow && nodeWindow.parentNode) {
+      let node = nodeWindow.parentNode;
+      if (node.isTabbed() || node.isStacked()) {
+        return Utils.rectContainsPoint(node.rect, pointerCoord);
+      }
+    }
+    return false;
+  }
+
+  getPointerPositionInside(nodeWindow) {
+    if (nodeWindow && nodeWindow._data) {
+      const metaWindow = nodeWindow.nodeValue;
+      const metaRect = metaWindow.get_frame_rect();
+      // on: last position of cursor inside window
+      // on: titlebar: near to app toolbars, menubar, tabs, etc...
+      let [wx, wy] = nodeWindow.pointer
+        ? [nodeWindow.pointer.x, nodeWindow.pointer.y]
+        : [metaRect.width / 2, 8];
+      let px = wx >= metaRect.width ? metaRect.width - 8 : wx;
+      let py = wy >= metaRect.height ? metaRect.height - 8 : wy;
+      return {
+        x: metaRect.x + px,
+        y: metaRect.y + py,
+      };
+    }
+    return null;
+  }
+
+  storePointerLastPosition(nodeWindow) {
+    if (nodeWindow && nodeWindow._data) {
+      const metaWindow = nodeWindow.nodeValue;
+      const metaRect = metaWindow.get_frame_rect();
+      const pointerCoord = global.get_pointer();
+      if (Utils.rectContainsPoint(metaRect, pointerCoord)) {
+        let px = pointerCoord[0] - metaRect.x;
+        let py = pointerCoord[1] - metaRect.y;
+        if (px > 0 && py > 0) {
+          nodeWindow.pointer = { x: px, y: py };
+          Logger.debug(`stored pointer for [${metaWindow.get_title()}] at (${px},${py})`);
+        }
+      }
     }
   }
 
@@ -2451,37 +2540,34 @@ export class WindowManager extends GObject.Object {
       knownFloats.filter((kf) => {
         let matchTitle = false;
         let matchClass = false;
+        let matchId = false;
 
         if (kf.wmTitle) {
           if (kf.wmTitle === " ") {
             matchTitle = kf.wmTitle === windowTitle;
           } else {
             let titles = kf.wmTitle.split(",");
-            matchTitle = titles.filter((t) => {
-              if (windowTitle) {
-                if (t.startsWith('!')) {
-                  return !windowTitle.includes(t.slice(1))
-                } else {
-                  return windowTitle.includes(t)
+            matchTitle =
+              titles.filter((t) => {
+                if (windowTitle) {
+                  if (t.startsWith("!")) {
+                    return !windowTitle.includes(t.slice(1));
+                  } else {
+                    return windowTitle.includes(t);
+                  }
                 }
-              }
-              return false
-            }).length > 0;
+                return false;
+              }).length > 0;
           }
         }
         if (kf.wmClass) {
           matchClass = kf.wmClass.includes(metaWindow.get_wm_class());
         }
-
-        if (kf.wmClass && kf.wmTitle) {
-          return matchTitle && matchClass;
-        } else {
-          if (kf.wmTitle) {
-            return matchTitle;
-          } else {
-            return matchClass;
-          }
+        if (kf.wmId) {
+          matchId = kf.wmId === metaWindow.get_id();
         }
+
+        return (!kf.wmId || matchId) && (!kf.wmTitle || matchTitle) && matchClass;
       }).length > 0;
 
     return floatByType || floatOverride;

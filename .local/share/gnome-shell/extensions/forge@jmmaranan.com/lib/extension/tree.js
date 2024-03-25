@@ -79,6 +79,7 @@ export class Node extends GObject.Object {
     this.tab = null;
     this.decoration = null;
     this.app = null;
+    this.pointer = null;
 
     if (this.isWindow()) {
       // When destroy() is called on Meta.Window, it might not be
@@ -474,9 +475,9 @@ export class Node extends GObject.Object {
       child: new St.Icon({ icon_name: "window-close-symbolic" }),
     });
 
-    tabContents.add(iconBin);
-    tabContents.add(titleButton);
-    tabContents.add(closeButton);
+    tabContents.add_child(iconBin);
+    tabContents.add_child(titleButton);
+    tabContents.add_child(closeButton);
 
     let clickFn = () => {
       this.parentNode.childNodes.forEach((c) => {
@@ -552,6 +553,17 @@ export class Node extends GObject.Object {
 
   set tile(value) {
     this.float = !value;
+  }
+
+  resetLayoutSingleChild() {
+    let tabbedOrStacked = this.isTabbed() || this.isStacked();
+    if (tabbedOrStacked && this.singleOrNoChild()) {
+      this.layout = LAYOUT_TYPES.HSPLIT;
+    }
+  }
+
+  singleOrNoChild() {
+    return this.childNodes.length <= 1;
   }
 }
 
@@ -946,6 +958,7 @@ export class Tree extends Node {
     }
     this.resetSiblingPercent(parentNode);
     this.resetSiblingPercent(parentTarget);
+    parentNode.resetLayoutSingleChild();
     return true;
   }
 
@@ -953,7 +966,7 @@ export class Tree extends Node {
    * Give the next sibling/parent/descendant on the tree based
    * on a given Meta.MotionDirection
    *
-   * @param {Tree.Node} node
+   * @param {Node} node
    * @param {Meta.MotionDirection} direction
    *
    * Credits: borrowed logic from tree.c of i3
@@ -1511,7 +1524,7 @@ export class Tree extends Node {
             } else {
               decoration.hide();
             }
-            if (!decoration.contains(child.tab)) decoration.add(child.tab);
+            if (!decoration.contains(child.tab)) decoration.add_child(child.tab);
           }
 
           child.render();
@@ -1561,7 +1574,23 @@ export class Tree extends Node {
   }
 
   debugTree() {
+    // this.debugChildNodes(this);
+  }
+
+  debugChildNodes(node) {
     this.debugNode(this);
+    node.childNodes.forEach((child) => {
+      this.debugChildNodes(child);
+    });
+  }
+
+  debugParentNodes(node) {
+    if (node) {
+      if (node.parentNode) {
+        this.debugParentNodes(node.parentNode);
+      }
+      this.debugNode(node);
+    }
   }
 
   debugNode(node) {
@@ -1576,7 +1605,7 @@ export class Tree extends Node {
 
     let attributes = "";
 
-    if (node.isWindow()) {
+    if (node.isWindow && node.isWindow()) {
       let metaWindow = node.nodeValue;
       attributes += `class:'${metaWindow.get_wm_class()}',title:'${
         metaWindow.title
@@ -1590,6 +1619,9 @@ export class Tree extends Node {
 
     if (node.rect) {
       attributes += `,rect:${node.rect.width}x${node.rect.height}+${node.rect.x}+${node.rect.y}`;
+      const pointerCoord = global.get_pointer();
+      const pointerInside = Utils.rectContainsPoint(node.rect, pointerCoord) ? "yes" : "no";
+      attributes += `,pointer:${pointerInside}`;
     }
 
     if (level !== 0) Logger.debug(`${spacing}|`);
@@ -1598,10 +1630,6 @@ export class Tree extends Node {
         node.index !== null ? node.index : "-"
       } @${attributes}`
     );
-
-    node.childNodes.forEach((child) => {
-      this.debugNode(child);
-    });
   }
 
   findParent(childNode, parentNodeType) {

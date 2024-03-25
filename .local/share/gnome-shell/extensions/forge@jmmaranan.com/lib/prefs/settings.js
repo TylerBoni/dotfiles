@@ -101,6 +101,7 @@ export class SettingsPage extends PreferencesPage {
           type: "s",
           bind: "dnd-center-layout",
           items: [
+            { id: "swap", name: _("Swap") },
             { id: "tabbed", name: _("Tabbed") },
             { id: "stacked", name: _("Stacked") },
           ],
@@ -125,6 +126,19 @@ export class SettingsPage extends PreferencesPage {
           experimental: true,
           settings,
           bind: "quick-settings-enabled",
+        }),
+      ],
+    });
+
+    this.add_group({
+      title: _("Behavior"),
+      children: [
+        new SwitchRow({
+          title: _("Move Pointer with the Focus"),
+          subtitle: _("Move the pointer when focusing or swapping via keyboard"),
+          experimental: true,
+          settings,
+          bind: "move-pointer-focus-enabled",
         }),
       ],
     });

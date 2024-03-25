@@ -18,18 +18,18 @@ while [[ 0 -eq 0 ]]; do
 	battery_charge="$(cat /sys/class/power_supply/BAT0/capacity)"
 
 	if [[ $battery_status == 'Discharging' && $battery_charge -le 30 ]]; then
-		if   [[ $battery_charge -le 15 ]]; then
+		if   [[ $battery_charge -le 10 ]]; then
 			notify-send --icon="$path/battery_low.svg" --urgency=critical "Battery critical!" "${battery_charge}%"
 			sleep 180
-		elif [[ $battery_charge -le 25 ]]; then
+		elif [[ $battery_charge -le 20 ]]; then
 			notify-send --icon="$path/battery_low.svg" --urgency=critical "Battery critical!" "${battery_charge}%"
 			sleep 240
-		elif [[ $battery_charge -le 40 ]]; then
-			notify-send --icon="$path/battery_low.svg" "Battery low!" "${battery_charge}%"
-			sleep 360
-		elif [[ $battery_charge -le 60 ]]; then
-			notify-send --icon="$path/battery_low.svg" "Battery low!" "${battery_charge}%"
-			sleep 480
+		# elif [[ $battery_charge -le 40 ]]; then
+		# 	notify-send --icon="$path/battery_low.svg" "Battery low!" "${battery_charge}%"
+		# 	sleep 360
+		# elif [[ $battery_charge -le 60 ]]; then
+		# 	notify-send --icon="$path/battery_low.svg" "Battery low!" "${battery_charge}%"
+		# 	sleep 480
 		fi
 	else
 		sleep 600
