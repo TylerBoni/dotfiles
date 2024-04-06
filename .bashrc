@@ -24,6 +24,8 @@ alias nt="nohup alacritty > /dev/null & disown"
 alias tx='tmux new-session -s $(basename $PWD)'
 alias ta='tmux a -t $(basename $PWD)'
 alias l1='ls -1h --color=auto --group-directories-first'
+alias :q='exit'
+alias cat='ccat'
 # alias avim='NVIM_APPNAME=AstroNvim nvim'
 # alias nvchad='NVIM_APPNAME=NvChad nvim'
 # alias tvim='NVIM_APPNAME=tvim nvim'
