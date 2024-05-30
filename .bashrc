@@ -26,6 +26,8 @@ alias ta='tmux a -t $(basename $PWD)'
 alias l1='ls -1h --color=auto --group-directories-first'
 alias :q='exit'
 alias cat='ccat'
+alias :work='cd ~/source/repos/work/'
+alias :personal='cd ~/source/repos/personal/'
 # alias avim='NVIM_APPNAME=AstroNvim nvim'
 # alias nvchad='NVIM_APPNAME=NvChad nvim'
 # alias tvim='NVIM_APPNAME=tvim nvim'
@@ -60,3 +62,4 @@ export GH=https://github.com
 
 
 export PATH="/home/tboni/bin:$PATH"
+export QT_QPA_PLATFORM=wayland
