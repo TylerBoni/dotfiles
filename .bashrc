@@ -35,7 +35,7 @@ alias :personal='cd ~/source/repos/personal/'
 # alias wssh='wezterm ssh && disown'
 function wssh() {
     nohup wezterm ssh $1 > /dev/null &
-    disown && sleep 2 && exit
+    disown && exit
 }
 
 # git aliases
