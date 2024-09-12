@@ -8,12 +8,7 @@
 alias ls='ls --color=auto --group-directories-first'
 alias la='ls -a --color=auto'
 alias grep='grep --color=auto'
-PS1='[\u@\h \W]\$ '
 
-# ###############
-# Added by tboni
-# ###############
-#
 export PATH=$PATH:$HOME/.local/bin
 export BG_IMAGE=$HOME/.config/i3/trees-1.jpg
 
@@ -33,8 +28,9 @@ alias :personal='cd ~/source/repos/personal/'
 # alias tvim='NVIM_APPNAME=tvim nvim'
 # alias lvim='NVIM_APPNAME=lazyvim nvim'
 # alias wssh='wezterm ssh && disown'
+#
 function wssh() {
-    nohup wezterm ssh $1 > /dev/null &
+    nohup wezterm ssh "$1" > /dev/null &
     disown && exit
 }
 
@@ -44,22 +40,15 @@ alias gitc='git commit -m'
 alias gits='git status'
 alias gitd='git diff'
 
-# add newlines before bash prompt
-dashed_ps1='\n\[$(printf "%*s" $(($(tput cols)-11)) "" | sed "s/ /-/g") \t\r\u@\h:\w\]\n\n\W\$ '
-regular_ps1='\u@\h:\w\$ '
-
-export PS1=$regular_ps1
-
-function setps1() {
-    if [ "$1" == "dashed" ]; then
-        export PS1=$dashed_ps1
-    else
-        export PS1=$regular_ps1
-    fi
-}
+PS1='\[\e[38;5;45m\]\u\[\e[38;5;208m\]@\H\[\e[0m\] \[\e[38;5;206m\]\W\[\e[0m\] \\$ '
+export PS1
 
 export GH=https://github.com
 
+export PATH="/home/tboni/bin:/home/tboni/go/bin:$PATH"
+export QT_QPA_PLATFORM=xcb
 
-export PATH="/home/tboni/bin:$PATH"
-export QT_QPA_PLATFORM=wayland
+export ANDROID_HOME=$HOME/Android/sdk 
+export PATH=$PATH:$ANDROID_HOME/emulator 
+export PATH=$PATH:$ANDROID_HOME/platform-tools
+
