@@ -1,5 +1,4 @@
-#
-# ~/.bashrc
+#!/bin/bash
 #
 
 # If not running interactively, don't do anything
@@ -51,4 +50,11 @@ export QT_QPA_PLATFORM=xcb
 export ANDROID_HOME=$HOME/Android/sdk 
 export PATH=$PATH:$ANDROID_HOME/emulator 
 export PATH=$PATH:$ANDROID_HOME/platform-tools
+export PATH=$PATH:$HOME/source/flutter_sdk/flutter/bin
 
+# Commands to be executed before the prompt is displayed
+# Save current working dir
+alias cwd='pwd > "${HOME}/.cwd"'
+
+# Change to saved working dir
+[[ -f "${HOME}/.cwd" ]] && cd "$(< ${HOME}/.cwd)"
