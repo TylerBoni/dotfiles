@@ -2,7 +2,6 @@ local wezterm = require("wezterm")
 
 local config = {
     enable_wayland = false,
-    prefer_egl=true,
     window_decorations = "None",
     window_background_opacity = 0.90,
     hide_tab_bar_if_only_one_tab = true,
@@ -14,7 +13,7 @@ local config = {
         saturation = 1.0,
         brightness = 0.5,
     },
-    font_size = 9.0,
+    font_size = 10.0,
     launch_menu = {},
     -- leader = { key="b", mods="CTRL" },
     disable_default_key_bindings = true,

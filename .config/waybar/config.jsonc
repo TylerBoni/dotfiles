@@ -1,0 +1,72 @@
+{
+    "layer": "top",
+    "position": "top",
+    "height": 27,
+    "modules-left": [
+        "hyprland/workspaces",
+        "custom/spotify"
+    ],
+    "modules-center": [
+        "clock"
+    ],
+    "modules-right": [
+        "tray",
+        "wireplumber",
+        "battery"
+    ],
+    "hyprland/workspaces": {
+        "format": "{name}",
+        "format-icons": {
+            "active": ""
+        }
+    },
+    "tray": {
+        "icon-size": 18,
+        "spacing": 15
+    },
+    "clock": {
+        "format": "{:%a %b %e  %R}",
+        "interval": 30,
+        "on-click": "gnome-calendar"
+    },
+    "battery": {
+        "bat": "BAT0",
+        "states": {
+            "full": 99,
+            "good": 98,
+            "normal": 98,
+            "warning": 20,
+            "critical": 20
+        },
+        "format": "{capacity}% {icon}",
+        "format-good": "{icon}",
+        "format-full": "{icon}",
+        "format-icons": [
+            "",
+            "",
+            "",
+            "",
+            ""
+        ],
+        "interval": 30
+    },
+    "wireplumber": {
+        "format": "{icon}  {volume}%",
+        "format-bluetooth": "  {volume}%",
+        "format-muted": "🔇",
+        "format-icons": {
+            "default": [
+                ""
+            ]
+        },
+        "on-click": "foot -e pulsemixer"
+    },
+    "custom/spotify": {
+        "exec": "python3 ~/.config/waybar/scripts/mediaplayer.py --player spotify",
+        "format": "{}",
+        "return-type": "json",
+        "on-click": "playerctl play-pause",
+        "on-right-click": "playerctl next",
+        "on-scroll-down": "playerctl previous"
+    }
+}
